@@ -98,7 +98,7 @@ int main()
 				if(task_list[i].arrival_time == timer && task_list[i].status == 0)
 				{
 					Enqueue(&task_list[i]);
-					task_list[i].status == 1;
+					task_list[i].status = 1;
 				}
 			}
 		}
@@ -107,7 +107,7 @@ int main()
 			if(task_list[i].status == 2)
 				++finished_task_number;
 		}
-		if(current_job->status != 2)
+		if(current_job->status == 1)
 			Enqueue(current_job);
 	}
 	printf("end\n\n");
