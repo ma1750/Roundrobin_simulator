@@ -64,7 +64,7 @@ int main()
 					if(task_list[i].arrival_time <= timer && task_list[i].status == 0)
 					{
 						Enqueue(&task_list[i]);
-						task_list[i].status == 1;
+						task_list[i].status = 1;
 					}
 				}
 				continue;
