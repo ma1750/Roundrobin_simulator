@@ -1,84 +1,80 @@
 #include <stdio.h>
 #include "round-robin.h"
 
-void Enqueue(task*);
-task* Dequeue();
-void print_result(task*, int);
-
-int main()
-{
-	task task_list[TASK_COUNT];
+int main(int argc, char const *argv[]){
+	task TASKLIST[25];
 	queuehead = queuetail = 0;
 	int timer = 0;
 	int finished_task_number = 0;
 	int num_of_tasks;
-	int step;
+	int qtime;
+	int counter;
 
-	//input
-	printf("input : Task_Number\n");
+	// input
+	printf("## Scheduler of Round-Robin method\ninput:\n");
 	scanf("%d", &num_of_tasks);
-	printf("input : Step_Number\n");
-	scanf("%d", &step);
-	printf("input : Task_Name Arrival_Time Cost\n");
 	for(int i = 0; i < num_of_tasks; ++i)
 	{
-		scanf(" %s %d %d", task_list[i].name, &task_list[i].arrival_time, &task_list[i].cost);
-		task_list[i].progress = 0;
-		task_list[i].status = 0;
+		scanf(" %s %d %d",
+			TASKLIST[i].name, &TASKLIST[i].arrival_time, &TASKLIST[i].cost);
+		TASKLIST[i].progress = 0;
+		TASKLIST[i].status = 0;
 	}
+	scanf(" %d", &qtime);
 
-	//sort task_list arrival order
-	//bubble sort is not so good
+	// sort TASKLIST arrival order with b_sort
 	for(int i = 0; i < num_of_tasks; ++i)
+	{
 		for(int j = 0; j < num_of_tasks; ++j)
 		{
-			if (task_list[i].arrival_time < task_list[j].arrival_time)
+			if (TASKLIST[i].arrival_time < TASKLIST[j].arrival_time)
 			{
-				task tmp = task_list[i];
-				task_list[i] = task_list[j];
-				task_list[j] = tmp;
+				task tmp = TASKLIST[i];
+				TASKLIST[i] = TASKLIST[j];
+				TASKLIST[j] = tmp;
 			}
 		}
+	}
+	enqueue(&TASKLIST[0]);
+	TASKLIST[0].status = 1;
 
-	Enqueue(&task_list[0]);
-	task_list[0].status = 1;
-
-	//main process
-	printf("\nstart\n");
+	// Output
+	printf("\nOutput:\nstart\n");
 	while(finished_task_number != num_of_tasks)
 	{
 		finished_task_number = 0;
-		task *current_job = Dequeue();
+		task *current_job = dequeue();
 		if(current_job == NULL)
 		{
 			++timer;
 			for (int i = 0; i < num_of_tasks; ++i)
 			{
-				if(task_list[i].status == 2)
+				if(TASKLIST[i].status == 2)
 					++finished_task_number;
 			}
 			if(finished_task_number != num_of_tasks)
 			{
 				for(int i = 0; i < num_of_tasks; ++i)
 				{
-					if(task_list[i].arrival_time <= timer && task_list[i].status == 0)
+					if(TASKLIST[i].arrival_time <= timer && !TASKLIST[i].status)
 					{
-						Enqueue(&task_list[i]);
-						task_list[i].status = 1;
+						enqueue(&TASKLIST[i]);
+						TASKLIST[i].status = 1;
 					}
 				}
 				continue;
 			}
-			else
-			{
-				printf("Eroor\n");
+			else{
+				printf("Error\n");
 				return -1;
 			}
 		}
 
-		int counter = timer + step;
-		if(current_job->cost - current_job->progress <= step)
+		counter = timer + qtime;
+		if(current_job->cost - current_job->progress <= qtime)
+		{
 			counter = timer + current_job->cost - current_job->progress;
+		}
 		while(timer < counter)
 		{
 			++timer;
@@ -89,28 +85,24 @@ int main()
 				printf("%2d Task:%s is finish\n", timer, current_job->name);
 				current_job->fin_time = timer;
 			}
-			else
-			{
-				printf("%2d Task:%s\n", timer, current_job->name);
-			}
+			else printf("%2d Task:%s\n", timer, current_job->name);
 			for(int i = 0; i < num_of_tasks; ++i)
 			{
-				if(task_list[i].arrival_time == timer && task_list[i].status == 0)
+				if(TASKLIST[i].arrival_time == timer && !TASKLIST[i].status)
 				{
-					Enqueue(&task_list[i]);
-					task_list[i].status = 1;
+					enqueue(&TASKLIST[i]);
+					TASKLIST[i].status = 1;
 				}
 			}
 		}
 		for (int i = 0; i < num_of_tasks; ++i)
 		{
-			if(task_list[i].status == 2)
-				++finished_task_number;
+			if(TASKLIST[i].status == 2)	++finished_task_number;
 		}
-		if(current_job->status == 1)
-			Enqueue(current_job);
+		if(current_job->status == 1)	enqueue(current_job);
 	}
 	printf("end\n\n");
-	print_result(task_list, num_of_tasks);
+	print_result(TASKLIST, num_of_tasks);
 	return 0;
 }
+
