@@ -1,7 +1,5 @@
 #define Q_SIZE 10000
 #define TASK_COUNT 100
-static int queuehead;
-static int queuetail;
 
 typedef struct {
 	char name[10];
@@ -17,6 +15,8 @@ typedef struct {
 	 */
 } task_t;
 
+static int queuehead;
+static int queuetail;
 static task_t* queue[Q_SIZE];
 
 void enqueue(task_t *x)
