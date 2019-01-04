@@ -60,21 +60,21 @@ int main()
 		while (timer < counter) {
 			++timer;
 			++current_job->progress;
-			if (current_job->cost == current_job->progress) {
-				current_job->status = 2;
-				printf("%2d Task:%s is finish\n", timer, current_job->name);
-				current_job->fin_time = timer;
-			} else {
+			if (current_job->cost != current_job->progress)
 				printf("%2d Task:%s\n", timer, current_job->name);
-			}
 			fetch_new_task(task_list, num_of_tasks, timer);
+		}
+		if (current_job->cost == current_job->progress) {
+			current_job->status = 2;
+			printf("%2d Task:%s is finish\n", timer, current_job->name);
+			current_job->fin_time = timer;
+		} else {
+			enqueue(current_job);
 		}
 		for (int i = 0; i < num_of_tasks; ++i) {
 			if(task_list[i].status == 2)
 				++finished_task_number;
 		}
-		if(current_job->status == 1)
-			enqueue(current_job);
 	}
 	printf("end\n\n");
 	print_result(task_list, num_of_tasks);
