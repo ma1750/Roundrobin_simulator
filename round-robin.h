@@ -53,7 +53,7 @@ void print_result(task_t *task_list, int tasks)
 void fetch_new_task(task_t *task_list, int num_of_tasks, int time)
 {
 	for (int i = 0; i < num_of_tasks; ++i) {
-		if(task_list[i].arrival_time <= time
+		if (task_list[i].arrival_time <= time
 				&& !task_list[i].status) {
 			enqueue(&task_list[i]);
 			task_list[i].status = 1;

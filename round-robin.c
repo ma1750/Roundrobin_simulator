@@ -72,7 +72,7 @@ int main()
 			enqueue(current_job);
 		}
 		for (int i = 0; i < num_of_tasks; ++i) {
-			if(task_list[i].status == 2)
+			if (task_list[i].status == 2)
 				++finished_task_number;
 		}
 	}
