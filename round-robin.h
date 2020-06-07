@@ -40,12 +40,13 @@ task_t* dequeue()
 void print_result(task_t *task_list, int tasks)
 {
 	int sum = 0;
-	printf("Task_Name|Arrival_Time|Finish_Time|\n");
+	printf("Task_Name|Arrival_Time|Finish_Time|Response_time|\n");
 	for (int i = 0; i < tasks; ++i) {
-		printf("%9s|%12d|%11d|\n",
+		int resp_time = task_list[i].fin_time - task_list[i].arrival_time;
+		printf("%9s|%12d|%11d|%13d|\n",
 			task_list[i].name, task_list[i].arrival_time,
-			task_list[i].fin_time);
-		sum += task_list[i].fin_time - task_list[i].arrival_time;
+			task_list[i].fin_time, resp_time);
+		sum += resp_time;
 	}
 	printf("\nAverage_Process_Time = %.2f\n", (double)sum/tasks);
 }
